@@ -1,1 +1,21 @@
 # assignment 4 solution
+
+require 'open3'
+require 'fileutils'
+require 'etc'
+
+desc 'Write a rake task called "archive"'
+
+task  :archive1 do 
+    home = Etc.getpwuid.dir
+    archive = File.join(Dir.home, "/rake_test/session4/my_archive/")
+    creatbackup = Dir.mkdir(File.join(Dir.home, "/rake_test/session4/my_archive/build"), 0700)
+    backup = File.dirname(File.join(Dir.home, "/rake_test/session4/my_archive/build/*"))
+    puts backup
+    cmd = "find #{archive} -type f '!' -name '*.txt' '!' -name '*.bak' | xargs tar cvf #{backup}/folder1_name.tar.gz"
+    puts cmd
+    Open3.popen3(cmd) do |stdin, stdout, stderr, wait_thr|
+    puts "#{stdout.read} #{stderr.read} #{wait_thr.value.exitstatus}"
+    
+    end
+end
